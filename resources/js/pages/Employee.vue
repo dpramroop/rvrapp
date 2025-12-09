@@ -5,6 +5,7 @@ import { employee } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import AddEmployee from './Employee/AddEmployee.vue';
+import EmployeeCard from './Employee/EmployeeCard.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,8 +13,25 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: employee().url,
     },
 ];
+const props= defineProps({
+     employee:Array<any>
+}
 
-const employeearr:any=ref([])
+)
+const search=ref('')
+const employeearr:any=ref([...props.employee ?? []])
+
+function filterCustomers() {
+    if (search.value.trim() === '') {
+        employeearr.value = [...props.employee ?? []]
+    } else {
+        const searchTerm = search.value.toLowerCase()
+        employeearr.value = (props.employee ?? []).filter((employee) =>
+            employee.fname.toLowerCase().includes(searchTerm) ||
+            employee.email.toLowerCase().includes(searchTerm)
+        )
+    }
+}
 
 function addarremployee(employee:any)
 {
@@ -25,12 +43,12 @@ function addarremployee(employee:any)
     <Head title="Employees" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-  <h2>Hello</h2>
+  <AddEmployee v-on:employee-added="addarremployee"/>
 <div>
     <div v-for="employee in employeearr">
-        <h1>{{ employee.fname }} {{ employee.lname }}</h1>
+        <EmployeeCard :employee="employee"/>
     </div>
 </div>
-  <AddEmployee v-on:employee-added="addarremployee"/>
+
     </AppLayout>
 </template>

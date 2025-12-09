@@ -15,9 +15,7 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('Employees', function () {
-    return Inertia::render('Employee');
-})->middleware(['auth', 'verified'])->name('employee');
+Route::get('Employees',[EmployeeController::class,'show'])->middleware(['auth', 'verified'])->name('employee');
 
 Route::post('AddEmployee',[EmployeeController::class,'store'])->middleware(['auth', 'verified'])->name('employee.add');
 
