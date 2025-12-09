@@ -70,7 +70,7 @@ const props = defineProps({
   openmodal: Boolean,
 });
 
-const emit = defineEmits<{ (e: "empupdate", emp: any): void }>();
+const emit = defineEmits<{ (e: "empupdate", emp: any): void, (e:"closeupmodal"):void }>();
 
 // Create the form (empty at first)
 const form = useForm({
@@ -96,7 +96,7 @@ watch(
 );
 
 const closeModal = () => {
-  emit("empupdate", null); // optional
+  emit("closeupmodal"); // optional
 };
 
 function submitForm() {

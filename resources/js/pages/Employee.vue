@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {ref,} from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue';
 import { employee } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, router} from '@inertiajs/vue3';
 import AddEmployee from './Employee/AddEmployee.vue';
 import EmployeeCard from './Employee/EmployeeCard.vue';
 import UpdateEmployee from './Employee/UpdateEmployee.vue';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Employees',
@@ -24,14 +25,26 @@ const upemployee:any=ref()
 const openmodal=ref(false)
 const employeearr:any=ref([...props.employee ?? []])
 
-function filterCustomers() {
+function deleteEmp(id:number)
+{
+   router.delete(`/DeleteEmployee/${id}`, {
+    onSuccess: () => {
+      // 2️⃣ Remove the employee from the local array
+      employeearr.value = employeearr.value.filter((emp:any) => emp.id !== id)
+    },
+    onError: (errors) => {
+      console.error('Error deleting employee:', errors)
+    }
+  })
+}
+function filterEmployees() {
     if (search.value.trim() === '') {
         employeearr.value = [...props.employee ?? []]
     } else {
         const searchTerm = search.value.toLowerCase()
         employeearr.value = (props.employee ?? []).filter((employee) =>
             employee.fname.toLowerCase().includes(searchTerm) ||
-            employee.email.toLowerCase().includes(searchTerm)
+            employee.lname.toLowerCase().includes(searchTerm)
         )
     }
 }
@@ -43,6 +56,11 @@ function UpdatingEmployee(employee:any)
     openmodal.value=true
 
 }
+function closeupmodal()
+{
+    openmodal.value=false
+}
+
 function updateemp(emp: any) {
 
   employeearr.value = employeearr.value.map((it:any) =>
@@ -65,10 +83,11 @@ function addarremployee(employee:any)
 
     <AppLayout :breadcrumbs="breadcrumbs">
   <AddEmployee v-on:employee-added="addarremployee"/>
-  <UpdateEmployee :employee="upemployee" :openmodal="openmodal" v-on:empupdate="updateemp" />
+  <label>SEARCH</label><input type="text" v-model="search" @input="filterEmployees" placeholder="SEARCH EMPLOYEE"/>
+  <UpdateEmployee :employee="upemployee" :openmodal="openmodal" v-on:empupdate="updateemp" v-on:closeupmodal="closeupmodal"/>
 <div>
-    <div v-for="employee in employeearr">
-        <EmployeeCard :employee="employee" v-on:employee-update="UpdatingEmployee"/>
+    <div v-for="employee in employeearr" :key="employee.id">
+        <EmployeeCard :employee="employee" :key="employee.id" v-on:employee-update="UpdatingEmployee" v-on:delete-emp="deleteEmp"/>
     </div>
 </div>
 

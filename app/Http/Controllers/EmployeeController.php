@@ -52,4 +52,10 @@ class EmployeeController extends Controller
         $Employee->update($validated);
 
     }
+
+    public function delete(Request $request)
+    {
+       $Employee = Employee::findOrFail($request->route('id'));
+       $Employee->delete();
+    }
 }

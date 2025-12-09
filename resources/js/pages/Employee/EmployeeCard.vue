@@ -4,7 +4,7 @@
         <div class="card-header">
             <div class="header-left">
                 <button class="btn btn-primary" @click="updateemp(employee)">Update</button>
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger" @click="deleteemp(employee.id)">Delete</button>
             </div>
             <div class="header-right">
                 <span class="timestamp">{{ datetime.toLocaleDateString()  }} {{ datetime.toLocaleTimeString() }}</span>
@@ -33,7 +33,8 @@
 
 <script setup lang="ts">
 import {ref} from 'vue'
-const emit= defineEmits<{ (e: 'employee-update', employee: any): void }>()
+
+const emit= defineEmits<{ (e: 'employee-update', employee: any): void,(e: 'delete-emp', id: number): void }>()
 const props=defineProps({
     employee:{
         type: Object,
@@ -49,9 +50,17 @@ const props=defineProps({
 const datetime= ref( new Date(props.employee.created_at))
 
 function updateemp(employee:any)
-{ 
+{
     emit('employee-update',employee)
 }
+function deleteemp(id:number)
+{
+    if (confirm('Are you sure you want to delete this employee?')) {
+    emit('delete-emp', id)
+  }
+
+}
+
 </script>
 
 <style scoped>
