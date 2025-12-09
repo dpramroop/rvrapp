@@ -83,7 +83,11 @@ function addarremployee(employee:any)
 
     <AppLayout :breadcrumbs="breadcrumbs">
   <AddEmployee v-on:employee-added="addarremployee"/>
-  <label>SEARCH</label><input type="text" v-model="search" @input="filterEmployees" placeholder="SEARCH EMPLOYEE"/>
+  <div style="margin:10px;">
+    <label>SEARCH</label>
+    <input style="margin-left: 1ch;" type="text" v-model="search" @input="filterEmployees" placeholder="SEARCH EMPLOYEE"/>
+  </div>
+
   <UpdateEmployee :employee="upemployee" :openmodal="openmodal" v-on:empupdate="updateemp" v-on:closeupmodal="closeupmodal"/>
 <div>
     <div v-for="employee in employeearr" :key="employee.id">
