@@ -6,7 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import AddEmployee from './Employee/AddEmployee.vue';
 import EmployeeCard from './Employee/EmployeeCard.vue';
-
+import UpdateEmployee from './Employee/UpdateEmployee.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Employees',
@@ -18,7 +18,10 @@ const props= defineProps({
 }
 
 )
+
 const search=ref('')
+const upemployee:any=ref()
+const openmodal=ref(false)
 const employeearr:any=ref([...props.employee ?? []])
 
 function filterCustomers() {
@@ -32,6 +35,24 @@ function filterCustomers() {
         )
     }
 }
+function UpdatingEmployee(employee:any)
+{
+
+    upemployee.value=employee
+
+    openmodal.value=true
+
+}
+function updateemp(emp: any) {
+
+  employeearr.value = employeearr.value.map((it:any) =>
+    it.id === emp.id ? { ...emp } : it
+  )
+
+  // Force Vue to see the change
+  employeearr.value = [...employeearr.value]
+openmodal.value=false
+}
 
 function addarremployee(employee:any)
 {
@@ -44,9 +65,10 @@ function addarremployee(employee:any)
 
     <AppLayout :breadcrumbs="breadcrumbs">
   <AddEmployee v-on:employee-added="addarremployee"/>
+  <UpdateEmployee :employee="upemployee" :openmodal="openmodal" v-on:empupdate="updateemp" />
 <div>
     <div v-for="employee in employeearr">
-        <EmployeeCard :employee="employee"/>
+        <EmployeeCard :employee="employee" v-on:employee-update="UpdatingEmployee"/>
     </div>
 </div>
 

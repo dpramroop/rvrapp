@@ -37,4 +37,19 @@ class EmployeeController extends Controller
       ]);
 
     }
+    public function update(Request $request)
+    {
+       Log::info($request);
+       $validated=$request->validate(
+        [
+          'fname'=>'string|max:50',
+          'lname'=>'string|max:50',
+          'dob'=>'date',
+          'position'=>'string|max:50'
+        ]
+       );
+      $Employee = Employee::findOrFail($request->route('id'));
+        $Employee->update($validated);
+
+    }
 }

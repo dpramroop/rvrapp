@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="card-header">
             <div class="header-left">
-                <button class="btn btn-primary">Update</button>
+                <button class="btn btn-primary" @click="updateemp(employee)">Update</button>
                 <button class="btn btn-danger">Delete</button>
             </div>
             <div class="header-right">
@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import {ref} from 'vue'
-
+const emit= defineEmits<{ (e: 'employee-update', employee: any): void }>()
 const props=defineProps({
     employee:{
         type: Object,
@@ -47,6 +47,11 @@ const props=defineProps({
     }
 })
 const datetime= ref( new Date(props.employee.created_at))
+
+function updateemp(employee:any)
+{ 
+    emit('employee-update',employee)
+}
 </script>
 
 <style scoped>

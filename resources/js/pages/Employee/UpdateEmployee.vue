@@ -1,10 +1,7 @@
 <template>
     <div class="container">
-        <button @click="isModalOpen = true" class="btn-add">
-            Add Employee
-        </button>
 
-        <div v-if="isModalOpen" class="modal-overlay" @click="closeModal">
+        <div v-if="props.openmodal" class="modal-overlay" @click="closeModal">
             <div class="modal-content" @click.stop>
                 <h2>Add New Employee</h2>
                 <form @submit.prevent="submitForm">
@@ -64,42 +61,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref} from 'vue'
-import { useForm } from '@inertiajs/vue3'
-import {store} from '@/actions/App/Http/Controllers/EmployeeController'
-const isModalOpen = ref(false)
+import { ref, watch } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { update } from "@/actions/App/Http/Controllers/EmployeeController";
 
-const emit=defineEmits<{ (e: 'employee-added', employee: any): void }>()
+const props = defineProps({
+  employee: Object,
+  openmodal: Boolean,
+});
+
+const emit = defineEmits<{ (e: "empupdate", emp: any): void }>();
+
+// Create the form (empty at first)
 const form = useForm({
-    fname: '',
-    lname: '',
-    dob: '',
-    position: ''
-})
+  fname: "",
+  lname: "",
+  dob: "",
+  position: "",
+  id:''
+});
+
+// 🔥 Watch for new employee passed from parent
+watch(
+  () => props.employee,
+  (newEmp) => {
+    if (!newEmp) return;
+    form.fname = newEmp.fname;
+    form.lname = newEmp.lname;
+    form.dob = newEmp.dob;
+    form.position = newEmp.position;
+    form.id= newEmp.id
+  },
+  { immediate: true }
+);
 
 const closeModal = () => {
-    isModalOpen.value = false
-    form.fname = ''
-    form.lname = ''
-    form.dob = ''
-    form.position = ''
-}
+  emit("empupdate", null); // optional
+};
 
 function submitForm() {
-
-
-   form.post(store().url, {
-   onSuccess: ({ }) => {
-    console.log('Employee successfully submitted:', { ...form })
-  emit('employee-added', form.data())
-    closeModal() // ✅ reset only after success
-     isModalOpen.value = false
-
-},
-    onError: (errors) => {
-      console.error('Validation errors:', errors)
-    }
-  })
+  form.put(update(form.id).url, {
+    onSuccess: () => {
+      emit("empupdate", form.data());
+    },
+  });
 }
 </script>
 
