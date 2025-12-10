@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('lname');
             $table->date('dob');
             $table->string('position');
+            $table->timestamp('emp_created');
             $table->timestamps();
         });
     }

@@ -63,6 +63,25 @@ function closeupmodal()
 
 function updateemp(emp: any) {
 
+//   const normalizedEmp = {
+//     ...emp,
+//     dob: typeof emp.dob === 'string' ? emp.dob : emp.dob.toISOString().split('T')[0],
+//     created_at: typeof emp.created_at === 'string' ? emp.created_at : emp.created_at.toISOString()
+//   };
+
+//     const index = employeearr.value.findIndex((e: any) => e.id === normalizedEmp.id);
+
+//   if (index !== -1) {
+//     // Replace the object at the found index
+//     employeearr.value[index] = normalizedEmp;
+
+//     // Force Vue to detect the update
+//     employeearr.value = [...employeearr.value];
+//   }
+//   openmodal.value = false;
+
+
+
   employeearr.value = employeearr.value.map((it:any) =>
     it.id === emp.id ? { ...emp } : it
   )
@@ -74,7 +93,8 @@ openmodal.value=false
 
 function addarremployee(employee:any)
 {
-    employeearr.value.push(employee)
+    window.location.reload()
+    // employeearr.value.push(employee)
 }
 </script>
 
@@ -90,10 +110,77 @@ function addarremployee(employee:any)
 
   <UpdateEmployee :employee="upemployee" :openmodal="openmodal" v-on:empupdate="updateemp" v-on:closeupmodal="closeupmodal"/>
 <div>
-    <div v-for="employee in employeearr" :key="employee.id">
+    <table>
+        <tr>
+        <th>Name</th>
+        <th>Date of Birth</th>
+        <th>Position</th>
+        <th>Created</th>
+        <th></th>
+        <th></th>
+        </tr>
+        <tr v-for="employee in employeearr" :key="employee.id">
+             <td>{{ employee.fname }} {{ employee.lname }}</td>
+             <td>{{ employee.dob }}</td>
+             <td>{{ employee.position }}</td>
+             <td>{{ new Date(employee.created_at).toLocaleDateString() }} {{ new Date(employee.created_at).toLocaleTimeString() }} </td>
+             <td><button type="button" @click="UpdatingEmployee(employee)">Update</button></td>
+             <td><button class="danger-delete" type="button" @click="deleteEmp(employee.id)">Delete</button></td>
+        </tr>
+    </table>
+    <!-- <div v-for="employee in employeearr" :key="employee.id">
         <EmployeeCard :employee="employee" :key="employee.id" v-on:employee-update="UpdatingEmployee" v-on:delete-emp="deleteEmp"/>
-    </div>
+    </div> -->
 </div>
 
     </AppLayout>
 </template>
+<style scoped>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th {
+        /* background-color: #f5f5f5; */
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid #ddd;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+        background-color: #0862d8;
+    }
+
+    button {
+        padding: 6px 12px;
+        margin: 0 4px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .danger-delete{
+         padding: 6px 12px;
+        margin: 0 4px;
+        border: none;
+        border-radius: 4px;
+        background-color: #e84611;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>

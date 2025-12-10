@@ -78,7 +78,8 @@ const form = useForm({
   lname: "",
   dob: "",
   position: "",
-  id:''
+  id:'',
+  created_at:''
 });
 
 // 🔥 Watch for new employee passed from parent
@@ -90,6 +91,7 @@ watch(
     form.lname = newEmp.lname;
     form.dob = newEmp.dob;
     form.position = newEmp.position;
+    form.created_at= newEmp.created_at
     form.id= newEmp.id
   },
   { immediate: true }

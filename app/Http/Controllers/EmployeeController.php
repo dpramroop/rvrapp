@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Employee;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
@@ -23,17 +24,20 @@ class EmployeeController extends Controller
        Log::info($request);
        $validated=$request->validate(
         [
-          'fname'=>'string|max:50',
-          'lname'=>'string|max:50',
-          'dob'=>'date',
-          'position'=>'string|max:50'
+          'fname'=>'required|string|max:50',
+          'lname'=>'required|string|max:50',
+          'dob'=>'required|date',
+          'position'=>'required|string|max:50',
+
         ]
        );
       Employee::create([
          'fname'=>$validated['fname'],
          'lname'=>$validated['lname'],
          'dob'=>$validated['dob'],
-         'position'=>$validated['position']
+         'position'=>$validated['position'],
+        '$emp_created' => $request->emp_created
+
       ]);
 
     }

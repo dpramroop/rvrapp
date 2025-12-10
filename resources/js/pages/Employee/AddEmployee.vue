@@ -74,7 +74,8 @@ const form = useForm({
     fname: '',
     lname: '',
     dob: '',
-    position: ''
+    position: '',
+    created_at: new Date().toLocaleString('sv-SE').replace(' ', ' ')
 })
 
 const closeModal = () => {

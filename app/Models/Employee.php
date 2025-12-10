@@ -12,6 +12,8 @@ class Employee extends Model
         'fname',
         'lname',
         'position',
-        'dob'
+        'dob',
+        'emp_created'
+
     ];
 }

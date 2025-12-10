@@ -1,15 +1,7 @@
 <template>
     <div class="employee-card">
         <!-- Header -->
-        <div class="card-header">
-            <div class="header-left">
-                <button class="btn btn-primary" @click="updateemp(employee)">Update</button>
-                <button class="btn btn-danger" @click="deleteemp(employee.id)">Delete</button>
-            </div>
-            <div class="header-right">
-                <span class="timestamp">{{ datetime.toLocaleDateString()  }} {{ datetime.toLocaleTimeString() }}</span>
-            </div>
-        </div>
+     
 
         <!-- Main Content -->
         <div class="card-main">
@@ -26,7 +18,15 @@
                     <span class="label">Date of Birth:</span>
                     <span class="value">{{ employee.dob }}</span>
                 </div>
+                 <div class="info-row">
+                <span class="value">{{ datetime.toLocaleDateString()  }} {{ datetime.toLocaleTimeString() }}</span>
             </div>
+            <div class="info-row">
+                <button class="btn btn-primary" @click="updateemp(employee)">Update</button>
+                <button class="btn btn-danger" @click="deleteemp(employee.id)">Delete</button>
+            </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -120,7 +120,7 @@ function deleteemp(id:number)
 
 .employee-info {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
 }
 
