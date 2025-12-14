@@ -1,0 +1,45 @@
+https://www.mongodb.com/docs/drivers/php/laravel-mongodb/current/quick-start/configure-mongodb/
+DB_CONNECTION=mongodb
+DB_URI="mongodb+srv://myUser:myPass123@mongo0.example.com/" your connection string
+
+Open the database.php file in the config directory and set the default database connection to the DB_CONNECTION environment variable as shown in the following line:
+
+'default' => env('DB_CONNECTION'),
+
+Add the following highlighted mongodb entry to the connections array in the same file:
+
+'connections' => [
+  'mongodb' => [
+    'driver' => 'mongodb',
+    'dsn' => env('DB_URI'),
+    'database' => 'sample_mflix',
+  ],
+],
+// ...
+
+
+Add the Laravel Integration provider
+Open the providers.php file in the bootstrap directory and add the following entry into the array:
+
+MongoDB\Laravel\MongoDBServiceProvider::class,
+
+Tip
+To learn how to register the provider in Laravel 10.x, see Registering Providers.
+
+
+***
+For User Model->
+use MongoDB\Laravel\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens; //npm install api
+
+(add these in the model)
+  protected $connection = 'mongodb';
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+***

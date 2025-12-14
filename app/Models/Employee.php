@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Employee extends Model
 {
     //
-    protected $table='employees';
+    protected $connection = 'mongodb';
     protected $fillable = [
         'fname',
         'lname',

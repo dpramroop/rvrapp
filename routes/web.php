@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MovieController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -20,4 +21,8 @@ Route::get('Employees',[EmployeeController::class,'show'])->middleware(['auth', 
 Route::post('AddEmployee',[EmployeeController::class,'store'])->middleware(['auth', 'verified'])->name('employee.add');
 Route::put('UpdateEmployee/{id}',[EmployeeController::class,'update'])->middleware(['auth', 'verified'])->name('employee.update');
 Route::delete('DeleteEmployee/{id}',[EmployeeController::class,'delete'])->middleware(['auth', 'verified'])->name('employee.delete');
+
+
+Route::get('/browse_movies/', [MovieController::class, 'show']);
+
 require __DIR__.'/settings.php';
