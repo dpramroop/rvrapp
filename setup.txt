@@ -43,3 +43,7 @@ use Laravel\Sanctum\HasApiTokens; //npm install api
     ];
 
 ***
+.env config for mongodb
+SESSION_DRIVER=file
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
