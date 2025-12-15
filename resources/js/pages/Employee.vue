@@ -111,6 +111,7 @@ function addarremployee(employee:any)
   <UpdateEmployee :employee="upemployee" :openmodal="openmodal" v-on:empupdate="updateemp" v-on:closeupmodal="closeupmodal"/>
 <div>
     <table>
+        <thead>
         <tr>
         <th>Name</th>
         <th>Date of Birth</th>
@@ -119,6 +120,8 @@ function addarremployee(employee:any)
         <th></th>
         <th></th>
         </tr>
+        </thead>
+        <tbody>
         <tr v-for="employee in employeearr" :key="employee.id">
              <td>{{ employee.fname }} {{ employee.lname }}</td>
              <td>{{ employee.dob }}</td>
@@ -127,6 +130,7 @@ function addarremployee(employee:any)
              <td><button type="button" @click="UpdatingEmployee(employee)">Update</button></td>
              <td><button class="danger-delete" type="button" @click="deleteEmp(employee.id)">Delete</button></td>
         </tr>
+        </tbody>
     </table>
     <!-- <div v-for="employee in employeearr" :key="employee.id">
         <EmployeeCard :employee="employee" :key="employee.id" v-on:employee-update="UpdatingEmployee" v-on:delete-emp="deleteEmp"/>
