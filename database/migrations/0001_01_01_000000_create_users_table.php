@@ -45,6 +45,18 @@ return new class extends Migration
             $table->timestamp('emp_created');
             $table->timestamps();
         });
+
+           Schema::create('customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('fname');
+            $table->string('lname');
+            $table->date('dob');
+            $table->string('address');
+            $table->string('city');
+            $table->string('contact_number');
+            $table->timestamp('emp_created');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -55,5 +67,7 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('employees');
+        Schema::dropIfExists('customers');
     }
 };

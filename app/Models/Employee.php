@@ -13,7 +13,8 @@ class Employee extends Model
         'lname',
         'position',
         'dob',
-        'emp_created'
+        'emp_created',
+        'document_id'
 
     ];
 }

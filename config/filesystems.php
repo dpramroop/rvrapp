@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Foundation\Application;
+use MongoDB\GridFS\Bucket;
 return [
 
     /*
@@ -59,6 +60,17 @@ return [
             'throw' => false,
             'report' => false,
         ],
+         'gridfs' => [
+        'driver' => 'gridfs',
+        'bucket' => static function (Application $app): Bucket {
+            return $app['db']->connection('mongodb')
+                ->getDatabase()
+                ->selectGridFSBucket([
+                    'bucketName' => 'avatars',
+                    'chunkSizeBytes' => 261120,
+                ]);
+        },
+    ],
 
     ],
 

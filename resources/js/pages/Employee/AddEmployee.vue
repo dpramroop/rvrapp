@@ -51,6 +51,17 @@
                         />
                     </div>
 
+                    <div class="form-group">
+                        <label for="position">Position *</label>
+                        <input
+                            id="file"
+                            @change="handleFileChange"
+                            type="file"
+                            required
+                            placeholder="Browse files"
+                        />
+                    </div>
+
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Submit</button>
                         <button type="button" class="btn-cancel" @click="closeModal">
@@ -75,7 +86,8 @@ const form = useForm({
     lname: '',
     dob: '',
     position: '',
-    created_at: new Date().toLocaleString('sv-SE').replace(' ', ' ')
+    created_at: new Date().toLocaleString('sv-SE').replace(' ', ' '),
+    files: null
 })
 
 const closeModal = () => {
@@ -84,7 +96,17 @@ const closeModal = () => {
     form.lname = ''
     form.dob = ''
     form.position = ''
+
 }
+
+function handleFileChange(event:any)  {
+  // Access the FileList object
+  const files = event.target.files;
+  if (files.length > 0) {
+    // Store the first file object in your data property
+    form.files = files[0];
+  }
+};
 
 function submitForm() {
 
