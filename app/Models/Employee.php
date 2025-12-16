@@ -14,7 +14,7 @@ class Employee extends Model
         'position',
         'dob',
         'emp_created',
-        'document_id'
+        'file'
 
     ];
 }
