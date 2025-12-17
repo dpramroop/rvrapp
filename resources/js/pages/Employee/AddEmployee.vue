@@ -51,7 +51,7 @@
                         />
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="position">Position *</label>
                         <input
                             id="file"
@@ -60,7 +60,27 @@
                             required
                             placeholder="Browse files"
                         />
-                    </div>
+                    </div> -->
+
+                    <div class="form-group">
+    <label>Signature *</label>
+
+    <canvas
+        ref="signatureCanvas"
+        width="400"
+        height="150"
+        class="signature-canvas"
+    ></canvas>
+
+    <button
+        type="button"
+        class="btn-cancel"
+        style="margin-top: 10px"
+        @click="clearSignature"
+    >
+        Clear Signature
+    </button>
+</div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Submit</button>
@@ -75,10 +95,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref} from 'vue'
+import { ref,onMounted,nextTick,watch} from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import {store} from '@/actions/App/Http/Controllers/EmployeeController'
+import SignaturePad from 'signature_pad'
+import jsPDF from 'jspdf'
 const isModalOpen = ref(false)
+const signatureCanvas = ref<HTMLCanvasElement | null>(null)
+let signaturePad: SignaturePad
 
 const emit=defineEmits<{ (e: 'employee-added', employee: any): void }>()
 const form = useForm({
@@ -87,7 +111,8 @@ const form = useForm({
     dob: '',
     position: '',
     created_at: new Date().toLocaleString('sv-SE').replace(' ', ' '),
-    files: null
+
+     pdf: null as File | null
 })
 
 const closeModal = () => {
@@ -99,16 +124,71 @@ const closeModal = () => {
 
 }
 
-function handleFileChange(event:any)  {
-  // Access the FileList object
-  const files = event.target.files;
-  if (files.length > 0) {
-    // Store the first file object in your data property
-    form.files = files[0];
-  }
-};
+// function handleFileChange(event:any)  {
+//   // Access the FileList object
+//   const files = event.target.files;
+//   if (files.length > 0) {
+//     // Store the first file object in your data property
+//     form.files = files[0];
+//   }
+// };
 
+// onMounted(() => {
+//     if (signatureCanvas.value) {
+//         signaturePad = new SignaturePad(signatureCanvas.value,{
+//     minWidth: 5,
+//     maxWidth: 10,
+//     penColor: "rgb(66, 133, 244)"
+// })
+//     }
+// })
+watch(isModalOpen, async (open) => {
+    if (open) {
+        await nextTick() // wait for DOM
+        if (!signatureCanvas.value) return
+
+        signaturePad = new SignaturePad(signatureCanvas.value, {
+            penColor: 'black',
+            backgroundColor: 'white'
+        })
+    }
+})
+const clearSignature = () => {
+    signaturePad?.clear()
+}
 function submitForm() {
+
+
+     if (signaturePad.isEmpty()) {
+        alert('Please provide a signature')
+        return
+    }
+
+    // 1️⃣ Create PDF
+    const pdf = new jsPDF()
+
+    pdf.setFontSize(14)
+    pdf.text('Employee Information', 20, 20)
+
+    pdf.setFontSize(11)
+    pdf.text(`First Name: ${form.fname}`, 20, 40)
+    pdf.text(`Last Name: ${form.lname}`, 20, 50)
+    pdf.text(`DOB: ${form.dob}`, 20, 60)
+    pdf.text(`Position: ${form.position}`, 20, 70)
+
+    // 2️⃣ Add signature image
+    const signatureImage = signaturePad.toDataURL('image/png')
+    pdf.text('Signature:', 20, 90)
+    pdf.addImage(signatureImage, 'PNG', 20, 95, 160, 40)
+
+    // 3️⃣ Convert PDF to File
+    const pdfBlob = pdf.output('blob')
+    const pdfFile = new File([pdfBlob], 'employee-signature.pdf', {
+        type: 'application/pdf'
+    })
+
+    form.pdf = pdfFile
+
 
 
    form.post(store().url, {
@@ -232,5 +312,12 @@ function submitForm() {
 
 .btn-cancel:hover {
     background-color: #5a6268;
+}
+
+.signature-canvas {
+    border: 2px solid black;
+    border-radius: 4px;
+    width: 100%;
+    touch-action: none;
 }
 </style>

@@ -23,6 +23,6 @@ Route::put('UpdateEmployee/{id}',[EmployeeController::class,'update'])->middlewa
 Route::delete('DeleteEmployee/{id}',[EmployeeController::class,'delete'])->middleware(['auth', 'verified'])->name('employee.delete');
 
 
-Route::get('/browse_movies/', [MovieController::class, 'show']);
+Route::get('/browse_movies/', [MovieController::class, 'show'])->middleware(['auth', 'verified'])->name('movies.browse');
 
 require __DIR__.'/settings.php';

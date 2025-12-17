@@ -33,10 +33,10 @@ class EmployeeController extends Controller
     $bucket = $db->selectGridFSBucket();
 
     /** 📄 Upload file */
-    $stream = fopen($request->file('files')->getRealPath(), 'rb');
+    $stream = fopen($request->file('pdf')->getRealPath(), 'rb');
 
     $fileId = $bucket->uploadFromStream(
-        $request->file('files')->getClientOriginalName(),
+        $request->file('pdf')->getClientOriginalName(),
         $stream,
         [
             'metadata' => [
@@ -45,23 +45,23 @@ class EmployeeController extends Controller
         ]
     );
     Log::info("Uploaded file with ID: " . $fileId);
-    //    $validated=$request->validate(
-    //     [
-    //       'fname'=>'required|string|max:50',
-    //       'lname'=>'required|string|max:50',
-    //       'dob'=>'required|date',
-    //       'position'=>'required|string|max:50',
+       $validated=$request->validate(
+        [
+          'fname'=>'required|string|max:50',
+          'lname'=>'required|string|max:50',
+          'dob'=>'required|date',
+          'position'=>'required|string|max:50',
 
-    //     ]
-    //    );
-    //   Employee::create([
-    //      'fname'=>$validated['fname'],
-    //      'lname'=>$validated['lname'],
-    //      'dob'=>$validated['dob'],
-    //      'position'=>$validated['position'],
-    //     '$emp_created' => $request->emp_created,
+        ]
+       );
+      Employee::create([
+         'fname'=>$validated['fname'],
+         'lname'=>$validated['lname'],
+         'dob'=>$validated['dob'],
+         'position'=>$validated['position'],
+        'document_id' => $fileId,
 
-    //   ]);
+      ]);
 
 
     }
