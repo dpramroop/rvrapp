@@ -59,7 +59,7 @@ class EmployeeController extends Controller
          'lname'=>$validated['lname'],
          'dob'=>$validated['dob'],
          'position'=>$validated['position'],
-        'document_id' => $fileId,
+        'file_id' => $fileId,
 
       ]);
 

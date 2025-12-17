@@ -47,3 +47,7 @@ use Laravel\Sanctum\HasApiTokens; //npm install api
 SESSION_DRIVER=file
 CACHE_DRIVER=file
 QUEUE_CONNECTION=sync
+
+
+*****
+npm install signature_pad jspdf -> for drawing and to convert to pdf
