@@ -1,5 +1,5 @@
 <?php
-
+use MongoDB\BSON\ObjectId;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -24,5 +24,21 @@ Route::delete('DeleteEmployee/{id}',[EmployeeController::class,'delete'])->middl
 
 
 Route::get('/browse_movies/', [MovieController::class, 'show'])->middleware(['auth', 'verified'])->name('movies.browse');
+Route::get('/documents/{id}', function ($id) {
+   $bucket = DB::connection('mongodb')->getMongoDB()->selectGridFSBucket();
+        // Open the stream for reading the file
+        $stream = $bucket->openDownloadStream(new ObjectId($id));
 
+        // Read the stream contents
+        $contents = stream_get_contents($stream);
+        fclose($stream);
+
+        // Optionally, retrieve metadata like the original filename
+        // $fileMetaData = $bucket->findOne(['_id' => $fileId]);
+
+        return Response::make($contents, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="employee-signature.pdf"',
+        ]);
+});
 require __DIR__.'/settings.php';
