@@ -25,6 +25,12 @@ const upemployee:any=ref()
 const openmodal=ref(false)
 const employeearr:any=ref([...props.employee ?? []])
 
+function showDoc(filePath: string) {
+    const baseUrl = window.location.origin; // Get the base URL of the current site
+    const fullUrl = `${baseUrl}/documents/${filePath}`; // Construct the full URL to the document
+    window.open(fullUrl, '_blank'); // Open the document in a new tab
+  }
+
 function deleteEmp(id:number)
 {
    router.delete(`/DeleteEmployee/${id}`, {
@@ -119,6 +125,7 @@ function addarremployee(employee:any)
         <th>Created</th>
         <th></th>
         <th></th>
+        <th></th>
         </tr>
         </thead>
         <tbody>
@@ -129,6 +136,7 @@ function addarremployee(employee:any)
              <td>{{ new Date(employee.created_at).toLocaleDateString() }} {{ new Date(employee.created_at).toLocaleTimeString() }} </td>
              <td><button type="button" @click="UpdatingEmployee(employee)">Update</button></td>
              <td><button class="danger-delete" type="button" @click="deleteEmp(employee.id)">Delete</button></td>
+              <td><button class="" type="button" @click="showDoc(employee.file_id)">Document</button></td>
         </tr>
         </tbody>
     </table>

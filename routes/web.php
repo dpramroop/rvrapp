@@ -40,5 +40,5 @@ Route::get('/documents/{id}', function ($id) {
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="employee-signature.pdf"',
         ]);
-});
+})->middleware(['auth', 'verified'])->name('show.document');
 require __DIR__.'/settings.php';
