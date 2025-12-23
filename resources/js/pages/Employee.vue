@@ -136,7 +136,7 @@ function addarremployee(employee:any)
              <td>{{ new Date(employee.created_at).toLocaleDateString() }} {{ new Date(employee.created_at).toLocaleTimeString() }} </td>
              <td><button type="button" @click="UpdatingEmployee(employee)">Update</button></td>
              <td><button class="danger-delete" type="button" @click="deleteEmp(employee.id)">Delete</button></td>
-              <td><button class="" type="button" @click="showDoc(employee.file_id)">Document</button></td>
+              <td><button class="" type="button" @click="showDoc(employee.file_id)" v-if="employee.file_id">Document</button></td>
         </tr>
         </tbody>
     </table>

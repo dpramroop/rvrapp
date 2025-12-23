@@ -25,46 +25,46 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        Mail::to('dpramroop24@gmail.com')->send(new CodeSender('123456'));
+       // Mail::to('dpramroop24@gmail.com')->send(new CodeSender('123456'));
       /** 🔗 Mongo connection */
-    // $client = new Client(config('database.connections.mongodb.dsn'));
-    // $db = $client->selectDatabase(
-    //     config('database.connections.mongodb.database')
-    // );
+    $client = new Client(config('database.connections.mongodb.dsn'));
+    $db = $client->selectDatabase(
+        config('database.connections.mongodb.database')
+    );
 
-    // /** 📦 GridFS bucket */
-    // $bucket = $db->selectGridFSBucket();
+    /** 📦 GridFS bucket */
+    $bucket = $db->selectGridFSBucket();
 
-    // /** 📄 Upload file */
-    // $stream = fopen($request->file('pdf')->getRealPath(), 'rb');
+    /** 📄 Upload file */
+    $stream = fopen($request->file('pdf')->getRealPath(), 'rb');
 
-    // $fileId = $bucket->uploadFromStream(
-    //     $request->file('pdf')->getClientOriginalName(),
-    //     $stream,
-    //     [
-    //         'metadata' => [
-    //             'type' => 'employee_document'
-    //         ]
-    //     ]
-    // );
-    // Log::info("Uploaded file with ID: " . $fileId);
-    //    $validated=$request->validate(
-    //     [
-    //       'fname'=>'required|string|max:50',
-    //       'lname'=>'required|string|max:50',
-    //       'dob'=>'required|date',
-    //       'position'=>'required|string|max:50',
+    $fileId = $bucket->uploadFromStream(
+        $request->file('pdf')->getClientOriginalName(),
+        $stream,
+        [
+            'metadata' => [
+                'type' => 'employee_document'
+            ]
+        ]
+    );
+    Log::info("Uploaded file with ID: " . $fileId);
+       $validated=$request->validate(
+        [
+          'fname'=>'required|string|max:50',
+          'lname'=>'required|string|max:50',
+          'dob'=>'required|date',
+          'position'=>'required|string|max:50',
 
-    //     ]
-    //    );
-    //   Employee::create([
-    //      'fname'=>$validated['fname'],
-    //      'lname'=>$validated['lname'],
-    //      'dob'=>$validated['dob'],
-    //      'position'=>$validated['position'],
-    //     'file_id' => $fileId,
+        ]
+       );
+      Employee::create([
+         'fname'=>$validated['fname'],
+         'lname'=>$validated['lname'],
+         'dob'=>$validated['dob'],
+         'position'=>$validated['position'],
+        'file_id' => $fileId,
 
-    //   ]);
+      ]);
 
 
     }
